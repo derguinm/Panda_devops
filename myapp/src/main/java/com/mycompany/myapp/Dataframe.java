@@ -48,7 +48,7 @@ public class Dataframe {
             for (int j = 0; j < n_c; j++) {
                 dataframe[i][j] = elements.get(j + n_l*i) ; 
             }
-            colonne_type.add( elements.get(n_l*i).getClass().getName() );
+            colonne_type.add( elements.get(n_c*i).getClass().getName() );
         
         }
     }
