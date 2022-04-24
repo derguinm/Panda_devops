@@ -45,7 +45,7 @@ public class Dataframe {
         dataframe = new Object[n_l][n_c] ;
 
         for (int i = 0; i < n_l; i++) {
-            for (int j = 0; j < n_c; i++) {
+            for (int j = 0; j < n_c; j++) {
                 dataframe[i][j] = elements.get(j + n_l*i) ; 
             }
             colonne_type.add( elements.get(n_l*i).getClass().getName() );
@@ -64,9 +64,10 @@ public class Dataframe {
             
             line = br.readLine().split(",");
             Collections.addAll(colonne_name,line);
-
+            String tmps;
             int i = 0;
-            while((line=br.readLine().split(","))!=null){
+            while((tmps=br.readLine())!=null){
+                line = tmps.split(",");
                 for (int j = 0; j < line.length; j++) {
                     dataframe[i][j]=line[j];
                 }
