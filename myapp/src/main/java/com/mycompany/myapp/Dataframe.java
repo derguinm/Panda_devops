@@ -18,7 +18,9 @@ public class Dataframe {
     private int n_l ;
     private int n_c ;
         
-    
+    public Object getObject(int i, int j){
+        return this.dataframe[i][j];
+    }
 
     public Object[][] getDataframe() {
         return dataframe;
@@ -142,4 +144,36 @@ public class Dataframe {
         }
 
     }    
+
+    /**
+     * 
+     * @param colonnesASelectionner = nom des colonnes à selectionner
+     * @return un nouveau Dataframe contenant uniquement les colonnes selectionées,
+     *  null en cas d'erreur
+     */
+    public Dataframe select(ArrayList<String> colonnesASelectionner){
+        //array servant à la création du nouveau dataframe
+        int size = colonnesASelectionner.size() * n_l;
+        Object[] tmp = new Object[size];
+
+        //pour chaque colonne selectionnée on remplit le tableau d'elements
+        for (int i = 0; i < colonnesASelectionner.size(); i ++){
+            
+            int numColonne = 0;
+            while (numColonne < this.n_c && this.colonne_name.get(numColonne) != colonnesASelectionner.get(i)){
+                numColonne++;
+            }
+            if (numColonne == this.n_c){
+                System.err.println("Dataframe.Select() : Une des colonnes n'a pas étée trouvée");
+                return null;
+            }
+            for (int ligne = 0; ligne < n_l; ligne++){
+                tmp[ligne * colonnesASelectionner.size() + i] = this.getObject(ligne, numColonne);
+            }
+        }
+        ArrayList<Object> elements = new ArrayList<>();
+        Collections.addAll(elements,tmp);
+
+        return new Dataframe(colonnesASelectionner, elements);
+    }
 }
