@@ -82,7 +82,18 @@ public class Dataframe{
             while((tmps=br.readLine())!=null){
                 line = tmps.split(",");
                 for (int j = 0; j < line.length; j++) {
-                    dataframe[i][j] = line[j];
+                    switch (colonne_name.get(j)){
+                        case "java.lang.Integer":
+                            dataframe[i][j] = Integer.parseInt(line[j]);
+                            break;
+                        case "java.lang.Float":
+                            dataframe[i][j] = Float.parseFloat(line[j]);
+                            break;
+                        case "java.lang.String":;
+                        default : 
+                            dataframe[i][j] = line[j];
+                    }
+                    
                 }
                 i++;
             }
@@ -155,7 +166,7 @@ public class Dataframe{
      * @return un nouveau Dataframe contenant uniquement les colonnes selectionées,
      *  null en cas d'erreur
      */
-    public Dataframe select(ArrayList<String> colonnesASelectionner){
+    public Dataframe selectFromLabel(ArrayList<String> colonnesASelectionner){
         //array servant à la création du nouveau dataframe
         int size = colonnesASelectionner.size() * n_l;
         Object[] tmp = new Object[size];
@@ -184,13 +195,13 @@ public class Dataframe{
     public boolean equals(Object o){
         if (this.getN_c() != ((Dataframe)o).getN_c() || 
         this.getN_l() != ((Dataframe)o).getN_l() || 
-        !this.colonne_name.equals(((Dataframe)o).colonne_name)/* ||
-        !this.colonne_type.equals(((Dataframe)o).colonne_type)*/){
+        !this.colonne_name.equals(((Dataframe)o).colonne_name) ||
+        !this.colonne_type.equals(((Dataframe)o).colonne_type)){
             return false;
         }
         for (int i = 0; i < this.getN_l(); i++){
             for (int j = 0; j < this.getN_c(); j++){
-                if (Integer.parseInt((String)this.getObject(i, j)) != Integer.parseInt((String)((Dataframe)o).getObject(i, j))){
+                if (!this.getObject(i, j).equals(((Dataframe)o).getObject(i, j))){
                     return false;
                 }
             }
