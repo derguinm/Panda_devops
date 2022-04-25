@@ -1,5 +1,7 @@
 package com.mycompany.myapp;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 import junit.framework.Test;
@@ -27,12 +29,13 @@ public class DataframeTest extends TestCase{
     {
         TestSuite suite = new TestSuite();
 
-        suite.addTest(new DataframeTest("Constructor1Test"));
-        suite.addTest(new DataframeTest("Constructor2Test"));
+        suite.addTest(new DataframeTest("ConstructorDFbyHandTest"));
+        suite.addTest(new DataframeTest("ConstructorDFfromFileTest"));
+        suite.addTest(new DataframeTest("printTest"));
         return suite;
     }
 
-    public void Constructor1Test(){
+    public void ConstructorDFbyHandTest(){
         Object[][] dataframe = new Object[3][2] ;
         ArrayList<String> colonne_name = new ArrayList<String>();
         ArrayList<String> colonne_type = new ArrayList<String>() ;
@@ -79,7 +82,7 @@ public class DataframeTest extends TestCase{
         assertTrue( !diff);
     }
 
-    public void Constructor2Test(){
+    public void ConstructorDFfromFileTest(){
         Object[][] dataframe = new Object[3][2] ;
         ArrayList<String> colonne_name = new ArrayList<String>();
         ArrayList<String> colonne_type = new ArrayList<String>() ;
@@ -98,7 +101,7 @@ public class DataframeTest extends TestCase{
         colonne_type.add("java.lang.Integer");  
         colonne_type.add("java.lang.Integer"); 
         
-        Dataframe df = new Dataframe("file.csv") ;
+        Dataframe df = new Dataframe("src/test/normalDataframe.csv") ;
         
         boolean diff = false ;
         for (int j2 = 0; j2 < n_c && !diff; j2++) {
@@ -116,7 +119,48 @@ public class DataframeTest extends TestCase{
             }
             
         }
-        df.print(0);
         assertFalse(diff);
+    }
+
+    public void printTest(){
+        Dataframe myDataframe = new Dataframe("src/test/normalDataframe.csv");
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        //print all a normal dataframe
+        myDataframe.print(0);
+        String expectedOutput = "A,B\n0,0\n1,1\n2,2\n";
+        assertEquals(expectedOutput, outContent.toString());
+        
+        //print all a normal dataframe from end 
+        outContent.reset();
+        myDataframe.print(-3);
+        expectedOutput = "A,B\n0,0\n1,1\n2,2\n";
+        assertEquals(expectedOutput, outContent.toString());
+
+        //print a part of normal dataframe from end
+        outContent.reset();
+        myDataframe.print(-2);
+        expectedOutput = "A,B\n1,1\n2,2\n";
+        assertEquals(expectedOutput, outContent.toString());
+
+        //print part of a dataframe from begining
+        outContent.reset();
+        myDataframe.print(2);
+        expectedOutput = "A,B\n0,0\n1,1\n";
+        assertEquals(expectedOutput, outContent.toString());
+
+        //print all of an empty dataframe
+        myDataframe = new Dataframe("src/test/emptyDataframe.csv");
+        outContent.reset();
+        myDataframe.print(0);
+        expectedOutput = "A,B\n";
+        assertEquals(expectedOutput, outContent.toString());
+
+        //print with wrong argument
+        outContent.reset();
+        myDataframe.print(1);
+        expectedOutput = "Invalid argument in function Dataframe.print()\n";
+        assertEquals(expectedOutput, outContent.toString());
     }
 }

@@ -101,13 +101,19 @@ public class Dataframe {
         return lines -2;
     }
     /** 
-    print affiche la dataframe entièrement si nb est nul, un nombre |nb| de ligne, si nb est
-    postif elle affiche les nb premières lignes sinon les dernières nb lignes dans leur ordre 
-    respective.
+    print affiche la dataframe entièrement si nb est nul. Si nb est
+    postif elle affiche les nb premières lignes, si il est négatif elle affiche les dernières nb 
+    lignes dans leur ordre respective.
     **/
     public void print(int nb){
         int begin , end ;
- 
+
+
+        if(Math.abs(nb) > n_l){
+            System.out.println("Invalid argument in function Dataframe.print()");
+            return;
+        }
+
         if(nb > 0){
             begin = 0 ;
             end = nb ;
