@@ -11,17 +11,23 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Dataframe {
+public class Dataframe{
     private Object[][] dataframe;
     private ArrayList<String> colonne_name ;
     private ArrayList<String> colonne_type ;
     private int n_l ;
     private int n_c ;
         
-    
+    public Object getObject(int i, int j){
+        return this.dataframe[i][j];
+    }
 
-    public Object[][] getDataframe() {
-        return dataframe;
+    public int getN_l(){
+        return n_l;
+    }
+
+    public int getN_c(){
+        return n_c;
     }
 
     public ArrayList<String> getColonne_name() {
@@ -40,11 +46,11 @@ public class Dataframe {
         n_l = nb_t/n_c ;
         dataframe = new Object[n_l][n_c] ;
 
-        for (int i = 0; i < n_l; i++) {
-            for (int j = 0; j < n_c; j++) {
+        for (int j = 0; j < n_c; j++) {
+            for (int i = 0; i < n_l; i++) {
                 dataframe[i][j] = elements.get(j + n_c*i) ; 
             }
-            colonne_type.add( elements.get(n_c*i).getClass().getName() );
+            colonne_type.add( elements.get(n_c*j).getClass().getName() );
         
         }
     }
@@ -76,7 +82,18 @@ public class Dataframe {
             while((tmps=br.readLine())!=null){
                 line = tmps.split(",");
                 for (int j = 0; j < line.length; j++) {
-                    dataframe[i][j] = line[j];
+                    switch (colonne_type.get(j)){
+                        case "java.lang.Integer":
+                            dataframe[i][j] = Integer.parseInt(line[j]);
+                            break;
+                        case "java.lang.Float":
+                            dataframe[i][j] = Float.parseFloat(line[j]);
+                            break;
+                        case "java.lang.String":
+                        default : 
+                            dataframe[i][j] = line[j];
+                    }
+                    
                 }
                 i++;
             }
@@ -108,6 +125,10 @@ public class Dataframe {
     public void print(int nb){
         int begin , end ;
 
+        if(this.colonne_name.size() == 0 || this.colonne_type.size() == 0){
+            System.out.println("Void Dataframe");
+            return;
+        }
 
         if(Math.abs(nb) > n_l){
             System.out.println("Invalid argument in function Dataframe.print()");
@@ -142,4 +163,55 @@ public class Dataframe {
         }
 
     }    
+
+    /**
+     * 
+     * @param colonnesASelectionner = nom des colonnes à selectionner
+     * @return un nouveau Dataframe contenant uniquement les colonnes selectionées,
+     *  null en cas d'erreur
+     */
+    public Dataframe selectFromLabel(ArrayList<String> colonnesASelectionner){
+        //array servant à la création du nouveau dataframe
+        int size = colonnesASelectionner.size() * n_l;
+        Object[] tmp = new Object[size];
+
+        //pour chaque colonne selectionnée on remplit le tableau d'elements
+        for (int i = 0; i < colonnesASelectionner.size(); i ++){
+            
+            int numColonne = 0;
+            while (numColonne < this.n_c && !this.colonne_name.get(numColonne).equals(colonnesASelectionner.get(i))){
+                numColonne++;
+            }
+            if (numColonne == this.n_c){
+                System.err.println("Dataframe.Select() : Une des colonnes n'a pas étée trouvée");
+                return null;
+            }
+            for (int ligne = 0; ligne < n_l; ligne++){
+                tmp[ligne * colonnesASelectionner.size() + i] = this.getObject(ligne, numColonne);
+            }
+            
+        }
+        ArrayList<Object> elements = new ArrayList<>();
+        Collections.addAll(elements,tmp);
+        
+        return new Dataframe(colonnesASelectionner, elements);
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this.getN_c() != ((Dataframe)o).getN_c() || 
+        this.getN_l() != ((Dataframe)o).getN_l() || 
+        !this.colonne_name.equals(((Dataframe)o).colonne_name) ||
+        !this.colonne_type.equals(((Dataframe)o).colonne_type)){
+            return false;
+        }
+        for (int i = 0; i < this.getN_l(); i++){
+            for (int j = 0; j < this.getN_c(); j++){
+                if (!this.getObject(i, j).equals(((Dataframe)o).getObject(i, j))){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
