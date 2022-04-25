@@ -21,6 +21,8 @@ public class DataframeTest extends TestCase{
     /**
      * @return the suite of tests being tested
      */
+    //TODO faut ajouter les tester ecrit ici pour qu'il soit dynamiquement execute.
+    // faut ajoutetr des tests sur la fonction print. 
     public static Test suite()
     {
         TestSuite suite = new TestSuite();
@@ -109,13 +111,12 @@ public class DataframeTest extends TestCase{
             for (int j = 0; j < n_l; j++) {
                 if(!(dataframe[j][j2].equals((String)df.getDataframe()[j][j2])) || diff){
                     diff = true ;
-                    System.out.println("my dataframe :" + dataframe[j][j2]+" construct df "+ (String)df.getDataframe()[j][j2]);
                     break ;
                 } 
             }
             
         }
-        
+        df.print(0);
         assertTrue( !diff);
     }
 }
