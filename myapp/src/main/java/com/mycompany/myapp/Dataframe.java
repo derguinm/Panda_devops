@@ -46,11 +46,11 @@ public class Dataframe{
         n_l = nb_t/n_c ;
         dataframe = new Object[n_l][n_c] ;
 
-        for (int i = 0; i < n_l; i++) {
-            for (int j = 0; j < n_c; j++) {
+        for (int j = 0; j < n_c; j++) {
+            for (int i = 0; i < n_l; i++) {
                 dataframe[i][j] = elements.get(j + n_c*i) ; 
             }
-            colonne_type.add( elements.get(n_c*i).getClass().getName() );
+            colonne_type.add( elements.get(n_c*j).getClass().getName() );
         
         }
     }
@@ -82,14 +82,14 @@ public class Dataframe{
             while((tmps=br.readLine())!=null){
                 line = tmps.split(",");
                 for (int j = 0; j < line.length; j++) {
-                    switch (colonne_name.get(j)){
+                    switch (colonne_type.get(j)){
                         case "java.lang.Integer":
                             dataframe[i][j] = Integer.parseInt(line[j]);
                             break;
                         case "java.lang.Float":
                             dataframe[i][j] = Float.parseFloat(line[j]);
                             break;
-                        case "java.lang.String":;
+                        case "java.lang.String":
                         default : 
                             dataframe[i][j] = line[j];
                     }
@@ -125,6 +125,10 @@ public class Dataframe{
     public void print(int nb){
         int begin , end ;
 
+        if(this.colonne_name.size() == 0 || this.colonne_type.size() == 0){
+            System.out.println("Void Dataframe");
+            return;
+        }
 
         if(Math.abs(nb) > n_l){
             System.out.println("Invalid argument in function Dataframe.print()");
@@ -185,9 +189,11 @@ public class Dataframe{
             for (int ligne = 0; ligne < n_l; ligne++){
                 tmp[ligne * colonnesASelectionner.size() + i] = this.getObject(ligne, numColonne);
             }
+            
         }
         ArrayList<Object> elements = new ArrayList<>();
         Collections.addAll(elements,tmp);
+        
         return new Dataframe(colonnesASelectionner, elements);
     }
 

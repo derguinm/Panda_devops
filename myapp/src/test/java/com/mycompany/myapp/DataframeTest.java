@@ -95,7 +95,7 @@ public class DataframeTest extends TestCase{
 
         for(int i=0; i<n_l; i++){
             for(int j=0; j<n_c; j++){
-                dataframe[i][j] = Integer.toString(i) ;
+                dataframe[i][j] = i ;
             }
         }
         colonne_name.add("A");
@@ -115,7 +115,7 @@ public class DataframeTest extends TestCase{
             }
             
             for (int j = 0; j < n_l; j++) {
-                if(!(dataframe[j][j2].equals((String)df.getObject(j,j2))) || diff){
+                if(!(dataframe[j][j2].equals(df.getObject(j,j2))) || diff){
                     diff = true ;
                     break ;
                 } 
@@ -132,7 +132,7 @@ public class DataframeTest extends TestCase{
 
         for(int i=0; i<n_l; i++){
             for(int j=0; j<n_c; j++){
-                dataframe[i][j] = Integer.toString(i) ;
+                dataframe[i][j] = i ;
             }
         }
 
@@ -200,7 +200,8 @@ public class DataframeTest extends TestCase{
         //test a normal select of 1 column
         ArrayList<String> nomsColonnes = new ArrayList<>();
         nomsColonnes.add("B");
-        assertEquals(new Dataframe("src/test/normalDataframeWithOnlyColumnB.csv"), myDataframe.selectFromLabel(nomsColonnes));
+        Dataframe test = myDataframe.selectFromLabel(nomsColonnes);
+        assertEquals(new Dataframe("src/test/normalDataframeWithOnlyColumnB.csv"),test );
         //test a select with bad argument
         nomsColonnes.add("v");
         assertNull(myDataframe.selectFromLabel(nomsColonnes));
