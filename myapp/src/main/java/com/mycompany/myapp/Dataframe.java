@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Dataframe {
+public class Dataframe{
     private Object[][] dataframe;
     private ArrayList<String> colonne_name ;
     private ArrayList<String> colonne_type ;
@@ -22,8 +22,12 @@ public class Dataframe {
         return this.dataframe[i][j];
     }
 
-    public Object[][] getDataframe() {
-        return dataframe;
+    public int getN_l(){
+        return n_l;
+    }
+
+    public int getN_c(){
+        return n_c;
     }
 
     public ArrayList<String> getColonne_name() {
@@ -160,7 +164,7 @@ public class Dataframe {
         for (int i = 0; i < colonnesASelectionner.size(); i ++){
             
             int numColonne = 0;
-            while (numColonne < this.n_c && this.colonne_name.get(numColonne) != colonnesASelectionner.get(i)){
+            while (numColonne < this.n_c && !this.colonne_name.get(numColonne).equals(colonnesASelectionner.get(i))){
                 numColonne++;
             }
             if (numColonne == this.n_c){
@@ -173,7 +177,24 @@ public class Dataframe {
         }
         ArrayList<Object> elements = new ArrayList<>();
         Collections.addAll(elements,tmp);
-
         return new Dataframe(colonnesASelectionner, elements);
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this.getN_c() != ((Dataframe)o).getN_c() || 
+        this.getN_l() != ((Dataframe)o).getN_l() || 
+        !this.colonne_name.equals(((Dataframe)o).colonne_name)/* ||
+        !this.colonne_type.equals(((Dataframe)o).colonne_type)*/){
+            return false;
+        }
+        for (int i = 0; i < this.getN_l(); i++){
+            for (int j = 0; j < this.getN_c(); j++){
+                if (Integer.parseInt((String)this.getObject(i, j)) != Integer.parseInt((String)((Dataframe)o).getObject(i, j))){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

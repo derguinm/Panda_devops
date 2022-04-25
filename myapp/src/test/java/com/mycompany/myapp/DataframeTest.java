@@ -28,10 +28,13 @@ public class DataframeTest extends TestCase{
     public static Test suite()
     {
         TestSuite suite = new TestSuite();
-
+        //TOTO : test equals method
+        suite.addTest(new DataframeTest("getObjectTest"));
+        suite.addTest(new DataframeTest("gettersTest"));
         suite.addTest(new DataframeTest("ConstructorDFbyHandTest"));
         suite.addTest(new DataframeTest("ConstructorDFfromFileTest"));
         suite.addTest(new DataframeTest("printTest"));
+        suite.addTest(new DataframeTest("selectTest"));
         return suite;
     }
 
@@ -73,7 +76,7 @@ public class DataframeTest extends TestCase{
             }
             
             for (int j = 0; j < n_l; j++) {
-                if(!(dataframe[j][j2].equals(df.getDataframe()[j][j2])) || diff){
+                if(!(dataframe[j][j2].equals(df.getObject(j,j2))) || diff){
                     diff = true ;
                     break ;
                 } 
@@ -112,7 +115,7 @@ public class DataframeTest extends TestCase{
             }
             
             for (int j = 0; j < n_l; j++) {
-                if(!(dataframe[j][j2].equals((String)df.getDataframe()[j][j2])) || diff){
+                if(!(dataframe[j][j2].equals((String)df.getObject(j,j2))) || diff){
                     diff = true ;
                     break ;
                 } 
@@ -121,10 +124,36 @@ public class DataframeTest extends TestCase{
         }
         assertFalse(diff);
     }
+    public void getObjectTest(){
+        Object[][] dataframe = new Object[3][2] ;
+
+        int n_l = 3; 
+        int n_c = 2;
+
+        for(int i=0; i<n_l; i++){
+            for(int j=0; j<n_c; j++){
+                dataframe[i][j] = Integer.toString(i) ;
+            }
+        }
+
+        Dataframe myDataframe = new Dataframe("src/test/normalDataframe.csv");
+        for (int i = 0; i < myDataframe.getN_l(); i++){
+            for(int j = 0; j < myDataframe.getN_c(); j++){
+                assertEquals(dataframe[i][j],myDataframe.getObject(i,j));
+            }
+        }
+    }
+
+    public void gettersTest (){
+        Dataframe myDataframe = new Dataframe("src/test/normalDataframe.csv");
+        assertEquals(myDataframe.getN_c(), 2);
+        assertEquals(myDataframe.getN_l(), 3);
+    }
 
     public void printTest(){
         Dataframe myDataframe = new Dataframe("src/test/normalDataframe.csv");
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream out = System.out;
         System.setOut(new PrintStream(outContent));
 
         //print all a normal dataframe
@@ -162,5 +191,22 @@ public class DataframeTest extends TestCase{
         myDataframe.print(1);
         expectedOutput = "Invalid argument in function Dataframe.print()\n";
         assertEquals(expectedOutput, outContent.toString());
+        
+        System.setOut(out);
+    }
+
+    public void selectTest(){
+        Dataframe myDataframe = new Dataframe("src/test/normalDataframe.csv");
+        //test a normal select of 1 column
+        ArrayList<String> nomsColonnes = new ArrayList<>();
+        nomsColonnes.add("B");
+        assertEquals(new Dataframe("src/test/normalDataframeWithOnlyColumnB.csv"), myDataframe.select(nomsColonnes));
+        //test a select with bad argument
+        nomsColonnes.add("v");
+        assertNull(myDataframe.select(nomsColonnes));
+        //test a select with more than one column
+        nomsColonnes.remove(1);
+        nomsColonnes.add("A");
+        assertEquals(new Dataframe("src/test/normalDataframeWithBBeforeA.csv"), myDataframe.select(nomsColonnes));
     }
 }
