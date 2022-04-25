@@ -15,6 +15,10 @@ public class Dataframe {
     private Object[][] dataframe;
     private ArrayList<String> colonne_name ;
     private ArrayList<String> colonne_type ;
+    private int n_l ;
+    private int n_c ;
+        
+    
 
     public Object[][] getDataframe() {
         return dataframe;
@@ -31,14 +35,14 @@ public class Dataframe {
     public Dataframe(ArrayList<String> colonne_name, ArrayList<Object> elements) {
         this.colonne_name = colonne_name ;
         this.colonne_type = new ArrayList<String>() ;
-        int n_c = colonne_name.size() ;
+        n_c = colonne_name.size() ;
         int nb_t = elements.size() ;
-        int n_l = nb_t/n_c ;
+        n_l = nb_t/n_c ;
         dataframe = new Object[n_l][n_c] ;
 
         for (int i = 0; i < n_l; i++) {
             for (int j = 0; j < n_c; j++) {
-                dataframe[i][j] = elements.get(i + n_l*j) ; 
+                dataframe[i][j] = elements.get(j + n_c*i) ; 
             }
             colonne_type.add( elements.get(n_c*i).getClass().getName() );
         
@@ -62,8 +66,8 @@ public class Dataframe {
             
             line = br.readLine().split(",");
 
-            int n_l = colonne_size(csvFilePath) ;
-            int n_c = line.length ;
+            n_l = colonne_size(csvFilePath) ;
+            n_c = line.length ;
             dataframe = new Object[n_l][n_c] ;
 
             Collections.addAll(colonne_name,line);
@@ -82,25 +86,60 @@ public class Dataframe {
         
     }
 
-
+    // calcule le nombre de ligne a partir du fichier csv.
     public static int colonne_size(String fileName) {
 
         Path path = Paths.get(fileName);
   
         int lines = 0;
         try {
-  
-            // much slower, this task better with sequence access
-            //lines = Files.lines(path).parallel().count();
-  
             lines = (int) Files.lines(path).count();
-  
         } catch (IOException e) {
             e.printStackTrace();
         }
   
-        return lines;
-  
+        return lines -2;
     }
-    
+    /** 
+    print affiche la dataframe entièrement si nb est nul. Si nb est
+    postif elle affiche les nb premières lignes, si il est négatif elle affiche les dernières nb 
+    lignes dans leur ordre respective.
+    **/
+    public void print(int nb){
+        int begin , end ;
+
+
+        if(Math.abs(nb) > n_l){
+            System.out.println("Invalid argument in function Dataframe.print()");
+            return;
+        }
+
+        if(nb > 0){
+            begin = 0 ;
+            end = nb ;
+        }
+        else if(nb < 0){
+            begin = n_l + nb ;
+            end = n_l ;
+        }
+        else{
+            begin = 0 ;
+            end = n_l ;
+        }
+        
+        int i=0;
+        for ( i = 0; i < n_c-1; i++) {
+            System.out.print(colonne_name.get(i) + ",");
+        }
+        System.out.println(colonne_name.get(i));
+        
+        int j ;
+        for (i = begin; i < end; i++) {
+            for (j = 0 ; j < n_c-1; j++) {
+                System.out.print(dataframe[i][j] + ",");
+            }
+            System.out.println(dataframe[i][j]);
+        }
+
+    }    
 }
