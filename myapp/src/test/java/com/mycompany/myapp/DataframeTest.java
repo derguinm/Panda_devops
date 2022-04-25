@@ -33,16 +33,16 @@ public class DataframeTest extends TestCase{
     }
 
     public void Constructor1Test(){
-        Object[][] dataframe = new Object[2][2] ;
+        Object[][] dataframe = new Object[3][2] ;
         ArrayList<String> colonne_name = new ArrayList<String>();
         ArrayList<String> colonne_type = new ArrayList<String>() ;
 
-        int n_c = 2;
-        int n_l = 2; 
+        int n_l = 3;
+        int n_c = 2; 
 
         for(int i=0; i<n_l; i++){
             for(int j=0; j<n_c; j++){
-                dataframe[j][i] = (Object)i ;
+                dataframe[i][j] = (Object)i ;
             }
         }
 
@@ -56,7 +56,7 @@ public class DataframeTest extends TestCase{
         ArrayList<Object> elements = new ArrayList<Object>() ;
         for (int i = 0; i < n_l; i++) {
             for (int j = 0; j < n_c; j++) {
-                elements.add( dataframe[j][i] ) ;
+                elements.add( dataframe[i][j] ) ;
             }
         }
 
@@ -80,16 +80,16 @@ public class DataframeTest extends TestCase{
     }
 
     public void Constructor2Test(){
-        Object[][] dataframe = new Object[2][2] ;
+        Object[][] dataframe = new Object[3][2] ;
         ArrayList<String> colonne_name = new ArrayList<String>();
         ArrayList<String> colonne_type = new ArrayList<String>() ;
 
+        int n_l = 3; 
         int n_c = 2;
-        int n_l = 2; 
 
         for(int i=0; i<n_l; i++){
             for(int j=0; j<n_c; j++){
-                dataframe[j][i] = Integer.toString(i) ;
+                dataframe[i][j] = Integer.toString(i) ;
             }
         }
         colonne_name.add("A");
@@ -117,6 +117,6 @@ public class DataframeTest extends TestCase{
             
         }
         df.print(0);
-        assertTrue( !diff);
+        assertFalse(diff);
     }
 }
