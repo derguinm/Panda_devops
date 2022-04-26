@@ -23,13 +23,11 @@ public class DataframeTest extends TestCase{
     /**
      * @return the suite of tests being tested
      */
-    //TODO faut ajouter les tester ecrit ici pour qu'il soit dynamiquement execute.
-    // faut ajoutetr des tests sur la fonction print. 
-    public static Test suite()
+    
+     public static Test suite()
     {
         TestSuite suite = new TestSuite();
-        //TOTO : test equals method:
-        //TODO : fixe lable bug in the function selectFromLabel
+    
         
         suite.addTest(new DataframeTest("getObjectTest"));
         suite.addTest(new DataframeTest("gettersTest"));
@@ -39,6 +37,8 @@ public class DataframeTest extends TestCase{
         suite.addTest(new DataframeTest("printTest"));
         suite.addTest(new DataframeTest("selectFromLabelTest"));
         suite.addTest(new DataframeTest("selectLineTest"));
+        suite.addTest(new DataframeTest("getStatTest"));
+        
         return suite;
     }
 
@@ -249,5 +249,25 @@ public class DataframeTest extends TestCase{
 
         assertEquals(new Dataframe("src/test/DataFrameLine-0-2.csv"), myDataframe.selectLine(lineIndx));
     }
-    
+
+    public void getStatTest(){
+        Dataframe myDataframe = new Dataframe("src/test/statDataframe.csv");
+        ArrayList<String> lineIndx =new ArrayList<>();
+
+        lineIndx.add("A");
+        lineIndx.add("B");
+        
+        ArrayList<Float> res=new ArrayList<>();
+        res = myDataframe.getStat(lineIndx,0);
+        assertTrue(0 == res.get(0));
+        assertTrue(0 == res.get(1));
+        res = myDataframe.getStat(lineIndx,1);
+        assertTrue(10 == res.get(0));
+        assertTrue(2 == res.get(1));
+        res = myDataframe.getStat(lineIndx,2);
+        assertTrue(4.5==res.get(0));
+        assertTrue(1.25 == res.get(1));
+      
+    } 
+
 }
