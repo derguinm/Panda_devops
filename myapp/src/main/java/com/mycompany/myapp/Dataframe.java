@@ -22,22 +22,43 @@ public class Dataframe{
         return this.dataframe[i][j];
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getN_l(){
         return n_l;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getN_c(){
         return n_c;
     }
 
+    
+    /** 
+     * @return the labels of the dataframe
+     */
     public ArrayList<String> getColonne_name() {
         return colonne_name;
     }
 
+    
+    /** 
+     * @return the type of the different label
+     */
     public ArrayList<String> getColonne_type() {
         return colonne_type;
     }
 
+    /**
+     * Creates a Dataframe instance from 2 arraylists
+     * @param colonne_name ArrayList containing the names of the columns 
+     * @param elements ArrayList containing the elements column after column
+     */
     public Dataframe(ArrayList<String> colonne_name, ArrayList<Object> elements) {
         this.colonne_name = colonne_name ;
         this.colonne_type = new ArrayList<String>() ;
@@ -54,7 +75,10 @@ public class Dataframe{
         
         }
     }
-
+    /**
+     * 
+     * @param csvFilePath
+     */
     public Dataframe(String csvFilePath){
         this.colonne_type = new ArrayList<String>() ;
         this.colonne_name = new ArrayList<String>() ;
@@ -103,6 +127,11 @@ public class Dataframe{
         
     }
 
+    
+    /** 
+     * @param fileName is a csv file 
+     * @return the number of line in the dataframe
+     */
     // calcule le nombre de ligne a partir du fichier csv.
     public static int colonne_size(String fileName) {
 
@@ -117,11 +146,13 @@ public class Dataframe{
   
         return lines -2;
     }
+    
+    
     /** 
-    print affiche la dataframe entièrement si nb est nul. Si nb est
-    postif elle affiche les nb premières lignes, si il est négatif elle affiche les dernières nb 
-    lignes dans leur ordre respective.
-    **/
+     * @param nb if nb is equal to zero, we print the whole dataframe,
+     *           if nb is postive, we print the first nb lines of the dataframe,
+     *           if nb is negative, we print the last |nb| lines of the dataframe. 
+     */
     public void print(int nb){
         int begin , end ;
 
@@ -166,9 +197,8 @@ public class Dataframe{
 
     /**
      * 
-     * @param colonnesASelectionner = nom des colonnes à selectionner
-     * @return un nouveau Dataframe contenant uniquement les colonnes selectionées,
-     *  null en cas d'erreur
+     * @param colonnesASelectionner = labels of column to select.
+     * @return a new dataframe that contains thes column in param. 
      */
     public Dataframe selectFromLabel(ArrayList<String> colonnesASelectionner){
         //array servant à la création du nouveau dataframe
@@ -192,6 +222,11 @@ public class Dataframe{
     }
 
 
+    
+    /** 
+     * @param list : list of line to select. 
+     * @return Dataframe that contains only the lines in param.
+     */
     public Dataframe  selectLine(ArrayList<Integer> list){
         ArrayList<Object> elements = new ArrayList<>();
         Iterator<Integer> it=list.iterator();
@@ -228,5 +263,85 @@ public class Dataframe{
             }
         }
         return true;
+    }
+
+    
+    /** 
+     * @param colonnesASelectionner : list of columns to select before getting statistics from them.
+     * @param stat : is an integer that specify the type of statistics we ask.
+     *                  stat = 0 => min, stat = 1 => max, stat = 2 => mean 
+     * @return a list where every element represent the statistic for each column.
+     */
+    public ArrayList<Float> getStat(ArrayList<String> colonnesASelectionner, int stat){
+        ArrayList<Float> statList = new ArrayList<Float>() ;
+        Dataframe new_df =  this.selectFromLabel(colonnesASelectionner) ;
+        for (int j = 0; j < new_df.getN_c(); j++) {
+            ArrayList<Float> colonneValues=new ArrayList<>();
+            for(int i=0; i<new_df.getN_l(); i++){
+            
+                colonneValues.add(((Integer)this.getObject(i,j)).floatValue());
+            }
+            switch(stat){
+                case 0:
+                statList.add(min(colonneValues));
+                break;
+                case 1:
+                statList.add(max(colonneValues));
+                break;
+                case 2:
+                statList.add(moy(colonneValues));
+                break;
+                default:
+                System.out.println("unknown operation");   
+            }
+            
+        }
+        return statList;
+    }
+    
+    /** 
+     * @param list a list of the elements.
+     * @return the minimum from the list.
+     */
+    public float min(ArrayList<Float> list ){
+        float minv = Float.MAX_VALUE ;
+        for(int i=0; i< list.size(); i++){
+            if(minv > list.get(i))
+                minv = list.get(i) ;
+        }
+
+        return minv ;
+    }
+
+    
+    /** 
+     * @param list a list of the elements.
+     * @return the maximum from the list.
+     */
+    public float max(ArrayList<Float> list ){
+        float maxv = Float.MIN_VALUE ;
+        for(int i=0; i< list.size(); i++){
+            if(maxv < list.get(i))
+                maxv = list.get(i) ;
+        }
+
+        return maxv ;
+    }
+
+    
+    /** 
+     * @param list a list of the elements.
+     * @return the mean of all the elements from the list.
+     */
+    public float moy(ArrayList<Float> list){
+        Iterator<Float> it=list.iterator();
+        float res=0;
+        int nb=0;
+        while(it.hasNext()){
+            res+=it.next();
+            nb++;
+        }
+        res=res/nb;
+        return res;
     }
 }
