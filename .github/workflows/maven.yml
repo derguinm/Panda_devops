@@ -21,3 +21,7 @@ jobs:
         cache: maven
     - name: generating report with Maven/Jacoco
       run: mvn -B clean jacoco:prepare-agent install jacoco:report --file myapp/pom.xml  
+    - name: jacoco-badge-generator
+      id: jacoco
+      uses: cicirello/jacoco-badge-generator@v2.6.1
+
