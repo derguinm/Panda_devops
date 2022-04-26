@@ -10,6 +10,10 @@ Fonctionnalités
 
 Choix d’outils
 -------------
+**Maven** pour l'intégration continue  
+**JUnit** pour les tests unitaires  
+**Plugin JaCoCo** pour la couverture de code  
+**Github CI** avec GitHub Actions pour la validation des tests  
 
 Workflow git
 -------------
