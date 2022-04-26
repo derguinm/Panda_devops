@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
+
 
 public class Dataframe{
     private Object[][] dataframe;
@@ -45,12 +45,12 @@ public class Dataframe{
         int nb_t = elements.size() ;
         n_l = nb_t/n_c ;
         dataframe = new Object[n_l][n_c] ;
-
+        int k=0;
         for (int j = 0; j < n_c; j++) {
             for (int i = 0; i < n_l; i++) {
-                dataframe[i][j] = elements.get(j + n_c*i) ; 
+                dataframe[i][j] = elements.get(k++) ; 
             }
-            colonne_type.add( elements.get(n_c*j).getClass().getName() );
+            colonne_type.add( elements.get(n_l*j).getClass().getName() );
         
         }
     }
@@ -172,10 +172,8 @@ public class Dataframe{
      */
     public Dataframe selectFromLabel(ArrayList<String> colonnesASelectionner){
         //array servant à la création du nouveau dataframe
-        int size = colonnesASelectionner.size() * n_l;
-        Object[] tmp = new Object[size];
+        ArrayList<Object> elements = new ArrayList<>();
 
-        //pour chaque colonne selectionnée on remplit le tableau d'elements
         for (int i = 0; i < colonnesASelectionner.size(); i ++){
             
             int numColonne = 0;
@@ -183,20 +181,37 @@ public class Dataframe{
                 numColonne++;
             }
             if (numColonne == this.n_c){
-                System.err.println("Dataframe.Select() : Une des colonnes n'a pas étée trouvée");
+                System.err.println("Dataframe.Select() : Une des colonnes n'a pas étée trouvée : "+colonnesASelectionner.get(i));
                 return null;
             }
             for (int ligne = 0; ligne < n_l; ligne++){
-                tmp[ligne * colonnesASelectionner.size() + i] = this.getObject(ligne, numColonne);
+                elements.add(this.getObject(ligne, numColonne));
             }
-            
         }
-        ArrayList<Object> elements = new ArrayList<>();
-        Collections.addAll(elements,tmp);
-        
         return new Dataframe(colonnesASelectionner, elements);
     }
 
+
+    public Dataframe  selectLine(ArrayList<Integer> list){
+        ArrayList<Object> elements = new ArrayList<>();
+        Iterator<Integer> it=list.iterator();
+        int i ;
+
+            for (int j = 0; j < this.getN_c(); j++) {
+                while(it.hasNext()){
+                    i = it.next() ;
+                    if(i<0 || i>=this.getN_l()){
+                        System.err.println("Dataframe.Select() : Une la ligne d'indice "+i+" n'a pas étée trouvée");
+                        return null;
+                    }
+                    elements.add(this.getObject(i, j)) ;
+                }
+                it=list.iterator();        
+            }
+
+        return new Dataframe(colonne_name, elements) ;  
+    }
+    
     @Override
     public boolean equals(Object o){
         if (this.getN_c() != ((Dataframe)o).getN_c() || 
