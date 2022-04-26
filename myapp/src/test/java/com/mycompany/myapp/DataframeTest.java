@@ -41,7 +41,9 @@ public class DataframeTest extends TestCase{
         
         return suite;
     }
-
+    /**
+     * compare two dataframe, one made by hand and the other by the constructor who takes the list of labels and list of elements as params.
+     */
     public void ConstructorDFbyHandTest(){
         Object[][] dataframe = new Object[3][2] ;
         ArrayList<String> colonne_name = new ArrayList<String>();
@@ -88,7 +90,9 @@ public class DataframeTest extends TestCase{
         }       
         assertTrue( !diff);
     }
-
+    /**
+     * compare two dataframe, one made by hand and the other by the constructor who takes a csv filename as param.
+     */
     public void ConstructorDFfromFileTest(){
         Object[][] dataframe = new Object[3][2] ;
         ArrayList<String> colonne_name = new ArrayList<String>();
@@ -128,6 +132,8 @@ public class DataframeTest extends TestCase{
         }
         assertFalse(diff);
     }
+
+
     public void getObjectTest(){
         Object[][] dataframe = new Object[3][2] ;
 
@@ -153,13 +159,15 @@ public class DataframeTest extends TestCase{
         assertEquals(myDataframe.getN_c(), 2);
         assertEquals(myDataframe.getN_l(), 3);
     }
-
+    /**
+     *  test the equals method of dataframe for all the variables of the class
+     */
     public void equalsTest(){
         //compare 2 equals dataframe
         assertEquals(new Dataframe("src/test/normalDataframe.csv"), new Dataframe("src/test/normalDataframe.csv"));
-        //compare 2 empty equals dataframe (column names but no values)
+        //compare 2 empty equals dataframe (same column names and no values)
         assertEquals(new Dataframe("src/test/emptyDataframe.csv"), new Dataframe("src/test/emptyDataframe.csv"));
-        //compare 2 empty different dataframe (column names but no values)
+        //compare 2 empty different dataframe (different column names and no values)
         assertFalse(new Dataframe("src/test/emptyDataframe.csv").equals(new Dataframe("src/test/otherEmptyDataframe.csv")));
         //compare 2 dataframe with different column names
         assertFalse(new Dataframe("src/test/normalDataframe.csv").equals(new Dataframe("src/test/dataframeWithDifferentColumnName.csv")));
@@ -172,7 +180,9 @@ public class DataframeTest extends TestCase{
         //compare 2 dataframe with different values
         assertFalse(new Dataframe("src/test/normalDataframe.csv").equals(new Dataframe("src/test/dataframeWithDifferentValue.csv")));
     }
-
+    /**
+     * print different type of dataframe.
+     */
     public void printTest(){
         Dataframe myDataframe = new Dataframe("src/test/normalDataframe.csv");
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -202,7 +212,9 @@ public class DataframeTest extends TestCase{
         expectedOutput = "A,B\n0,0\n1,1\n";
         assertEquals(expectedOutput, outContent.toString());
 
+        
         //print all of an empty dataframe
+        
         myDataframe = new Dataframe("src/test/emptyDataframe.csv");
         outContent.reset();
         myDataframe.print(0);
@@ -217,7 +229,9 @@ public class DataframeTest extends TestCase{
         
         System.setOut(out);
     }
-
+    /**
+     * compare between a dataframe from a cvs file and one generate from a selection of colunms on another dataframe. 
+     */
     public void selectFromLabelTest(){
         Dataframe myDataframe = new Dataframe("src/test/normalDataframe.csv");
         //test a normal select of 1 column
@@ -232,7 +246,9 @@ public class DataframeTest extends TestCase{
         nomsColonnes.add("A");
         assertEquals(new Dataframe("src/test/normalDataframeWithBBeforeA.csv"), myDataframe.selectFromLabel(nomsColonnes));
     }
-
+    /**
+     * compare between a dataframe from a cvs file and one generate from a selection of lines on another dataframe.
+     */
     public void selectLineTest(){
         Dataframe myDataframe = new Dataframe("src/test/normalDataframe.csv");
         //test a normal select of 1 column
@@ -249,7 +265,9 @@ public class DataframeTest extends TestCase{
 
         assertEquals(new Dataframe("src/test/DataFrameLine-0-2.csv"), myDataframe.selectLine(lineIndx));
     }
-
+    /**
+     * test if the results of the fonction getstat (min/max/mean) are correct by comparing it with expected result.
+     */
     public void getStatTest(){
         Dataframe myDataframe = new Dataframe("src/test/statDataframe.csv");
         ArrayList<String> lineIndx =new ArrayList<>();
