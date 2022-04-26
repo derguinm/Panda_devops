@@ -36,7 +36,7 @@ public class DataframeTest extends TestCase{
         suite.addTest(new DataframeTest("ConstructorDFbyHandTest"));
         suite.addTest(new DataframeTest("ConstructorDFfromFileTest"));
         suite.addTest(new DataframeTest("printTest"));
-        //suite.addTest(new DataframeTest("selectFromLabelTest"));
+        suite.addTest(new DataframeTest("selectFromLabelTest"));
         suite.addTest(new DataframeTest("selectLineTest"));
         return suite;
     }
@@ -203,18 +203,13 @@ public class DataframeTest extends TestCase{
         //test a normal select of 1 column
         ArrayList<String> nomsColonnes = new ArrayList<>();
         nomsColonnes.add("B");
-        Dataframe test = myDataframe.selectFromLabel(nomsColonnes);
-        assertEquals(new Dataframe("src/test/normalDataframeWithOnlyColumnB.csv"),test );
+        assertEquals(new Dataframe("src/test/normalDataframeWithOnlyColumnB.csv"),myDataframe.selectFromLabel(nomsColonnes) );
         //test a select with bad argument
         nomsColonnes.add("v");
         assertNull(myDataframe.selectFromLabel(nomsColonnes));
         //test a select with more than one column
-        nomsColonnes.remove(0);
-        nomsColonnes.remove(0);
+        nomsColonnes.remove(1);
         nomsColonnes.add("A");
-        nomsColonnes.add("B");
-        new Dataframe("src/test/DataFrameLine-0-2.csv").print(0);
-        myDataframe.selectFromLabel(nomsColonnes).print(0);
         assertEquals(new Dataframe("src/test/normalDataframeWithBBeforeA.csv"), myDataframe.selectFromLabel(nomsColonnes));
     }
 

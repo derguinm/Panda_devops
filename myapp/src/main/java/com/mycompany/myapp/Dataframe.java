@@ -172,10 +172,8 @@ public class Dataframe{
      */
     public Dataframe selectFromLabel(ArrayList<String> colonnesASelectionner){
         //array servant à la création du nouveau dataframe
-        int size = colonnesASelectionner.size() * n_l;
-        Object[] tmp = new Object[size];
+        ArrayList<Object> elements = new ArrayList<>();
 
-        //pour chaque colonne selectionnée on remplit le tableau d'elements
         for (int i = 0; i < colonnesASelectionner.size(); i ++){
             
             int numColonne = 0;
@@ -183,17 +181,13 @@ public class Dataframe{
                 numColonne++;
             }
             if (numColonne == this.n_c){
-                System.err.println("Dataframe.Select() : Une des colonnes n'a pas étée trouvée");
+                System.err.println("Dataframe.Select() : Une des colonnes n'a pas étée trouvée : "+colonnesASelectionner.get(i));
                 return null;
             }
             for (int ligne = 0; ligne < n_l; ligne++){
-                tmp[ligne * colonnesASelectionner.size() + i] = this.getObject(ligne, numColonne);
+                elements.add(this.getObject(ligne, numColonne));
             }
-            
         }
-        ArrayList<Object> elements = new ArrayList<>();
-        Collections.addAll(elements,tmp);
-        
         return new Dataframe(colonnesASelectionner, elements);
     }
 
