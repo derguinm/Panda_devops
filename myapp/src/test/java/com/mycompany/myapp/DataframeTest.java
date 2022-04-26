@@ -35,6 +35,7 @@ public class DataframeTest extends TestCase{
         suite.addTest(new DataframeTest("gettersTest"));
         suite.addTest(new DataframeTest("ConstructorDFbyHandTest"));
         suite.addTest(new DataframeTest("ConstructorDFfromFileTest"));
+        suite.addTest(new DataframeTest("equalsTest"));
         suite.addTest(new DataframeTest("printTest"));
         suite.addTest(new DataframeTest("selectFromLabelTest"));
         suite.addTest(new DataframeTest("selectLineTest"));
@@ -153,6 +154,25 @@ public class DataframeTest extends TestCase{
         assertEquals(myDataframe.getN_l(), 3);
     }
 
+    public void equalsTest(){
+        //compare 2 equals dataframe
+        assertEquals(new Dataframe("src/test/normalDataframe.csv"), new Dataframe("src/test/normalDataframe.csv"));
+        //compare 2 empty equals dataframe (column names but no values)
+        assertEquals(new Dataframe("src/test/emptyDataframe.csv"), new Dataframe("src/test/emptyDataframe.csv"));
+        //compare 2 empty different dataframe (column names but no values)
+        assertFalse(new Dataframe("src/test/emptyDataframe.csv").equals(new Dataframe("src/test/otherEmptyDataframe.csv")));
+        //compare 2 dataframe with different column names
+        assertFalse(new Dataframe("src/test/normalDataframe.csv").equals(new Dataframe("src/test/dataframeWithDifferentColumnName.csv")));
+        //compare 2 dataframe with different column type
+        assertFalse(new Dataframe("src/test/normalDataframe.csv").equals(new Dataframe("src/test/dataframeWithDifferentColumnType.csv")));
+        //compare 2 dataframe with different number of line
+        assertFalse(new Dataframe("src/test/normalDataframe.csv").equals(new Dataframe("src/test/normalDataframe.csv").selectLine(new ArrayList<Integer>(){{add(0);}})));
+        //compare 2 dataframe with different number of column
+        assertFalse(new Dataframe("src/test/normalDataframe.csv").equals(new Dataframe("src/test/normalDataframe.csv").selectFromLabel((new ArrayList<String>(){{add("A");}}))));
+        //compare 2 dataframe with different values
+        assertFalse(new Dataframe("src/test/normalDataframe.csv").equals(new Dataframe("src/test/dataframeWithDifferentValue.csv")));
+    }
+
     public void printTest(){
         Dataframe myDataframe = new Dataframe("src/test/normalDataframe.csv");
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -229,6 +249,5 @@ public class DataframeTest extends TestCase{
 
         assertEquals(new Dataframe("src/test/DataFrameLine-0-2.csv"), myDataframe.selectLine(lineIndx));
     }
-
     
 }
