@@ -7,6 +7,14 @@ Panda Devops
 
 Fonctionnalités
 -------------
+**Constructeur d'un DataFrame**  
+On construit un DataFrame à partir un fichier CSV ou bien grace à une liste d'Object.  
+**Affichage d'un DataFrame**  
+On affiche le début, la fin ou la totalité d'un DataFrame.  
+**Selection dans un DataFrame**  
+On crée un nouveau DataFrame à partir des colonnes ou bien des lignes d'un autre DataFrame.  
+**Statistiques sur un DataFrame**  
+On calcule des statistiques sur un ensemble de label d'un DataFrame donné.  
 
 Choix d’outils
 -------------
