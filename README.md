@@ -28,3 +28,7 @@ Workflow git
 
 Feedback
 -------------
+Ce projet a été très interessant car ça a été l'occasion de combiner la mise en pratique des différentes technologies que nous avons découvertes au cours des TP et cours de DevOps. Nous souhaitons tous nous orienter vers le milieu de l'industrie informatique, hors nous n'avions jamais réalisé de projet aussi bien organisé, à l'aide des méthodes de travail utilisées en entreprise.
+Nous avions déjà utilisé git, mais, avant ce cours, nous ne connaissions pas les bonnes pratiques à mettre en oeuvre. Même si la mise en place de ces pratiques n'est pas irréprochable au sein de ce projet, nous en avons compris les principes fondamentaux et cette mise en application à étée très enrichissante.
+Github action nous était complètement inconnu et l'instauration de pipeline d'intégration continue nous a énormément rapproché du monde de l'industrie logicielle.
+Maven, JUnit et le plugin JaCoCo ont étés des outils importants dans la vérification de la qualité de code. 
