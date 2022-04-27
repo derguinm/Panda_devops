@@ -26,9 +26,15 @@ Choix d’outils
 Workflow git
 -------------
 
+- La branche main doit toujours être fonctionnel et passer tous tests unitaires.  
+- Lorsque quelqu'un veut implémenter une nouvelle fonctionnalité il doit créer une feature branch a partir du main.  
+- Personne pourra push directement dans la branch main.  
+- Lorsqu'une nouvelle fonctionnalité est finie et prête à être fusionné à la branch main, une pull request doit être créé qui sera ensuite testé automatiquement à l'aide GitHub CI, si celle ci passe tous les tests alors pour la merge un membre de l'équipe autre que celui qui a créé la pull request doit valider celle-ci pour qu'elle soit ensuite merge.  
+
 Feedback
 -------------
-Ce projet a été très interessant car ça a été l'occasion de combiner la mise en pratique des différentes technologies que nous avons découvertes au cours des TP et cours de DevOps. Nous souhaitons tous nous orienter vers le milieu de l'industrie informatique, hors nous n'avions jamais réalisé de projet aussi bien organisé, à l'aide des méthodes de travail utilisées en entreprise.
-Nous avions déjà utilisé git, mais, avant ce cours, nous ne connaissions pas les bonnes pratiques à mettre en oeuvre. Même si la mise en place de ces pratiques n'est pas irréprochable au sein de ce projet, nous en avons compris les principes fondamentaux et cette mise en application à étée très enrichissante.
-Github action nous était complètement inconnu et l'instauration de pipeline d'intégration continue nous a énormément rapproché du monde de l'industrie logicielle.
-Maven, JUnit et le plugin JaCoCo ont étés des outils importants dans la vérification de la qualité de code. 
+Ce projet a été très interessant car ça a été l'occasion de combiner la mise en pratique des différentes technologies que nous avons découvertes au cours des TP et cours de DevOps. Nous souhaitons tous nous orienter vers le milieu de l'industrie informatique, hors nous n'avions jamais réalisé de projet aussi bien organisé, à l'aide des méthodes de travail utilisées en entreprise.  
+Nous avions déjà utilisé git, mais, avant ce cours, nous ne connaissions pas les bonnes pratiques à mettre en oeuvre. Même si la mise en place de ces pratiques n'est pas irréprochable au sein de ce projet, nous en avons compris les principes fondamentaux et cette mise en application à étée très enrichissante.  
+Github action nous était complètement inconnu et l'instauration de pipeline d'intégration continue nous a énormément rapproché du monde de l'industrie logicielle.  
+Maven, JUnit et le plugin JaCoCo ont étés des outils importants dans la vérification de la qualité de code.   
+
